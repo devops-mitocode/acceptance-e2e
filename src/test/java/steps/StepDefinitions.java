@@ -21,27 +21,47 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 public class StepDefinitions {
 
 	//private final String HOSTNAME = Optional.ofNullable(System.getenv("CONTAINER_IP")).orElse("localhost");
-	//private final String HOSTNAME = System.getenv().getOrDefault("CONTAINER_IP", "localhost");
-	private final String APP_URL = System.getenv().getOrDefault("APP_URL", "http://localhost:4200/petclinic");
+	private final String EPHEMERAL = System.getenv().getOrDefault("EPHEMERAL", "false");
+	//private final String APP_URL = System.getenv().getOrDefault("APP_URL", "http://localhost:4200/petclinic");
 
 	private WebDriver driver;
 
-	@Given("I visit the HOMEPAGE")
-	public void i_visit_the_HOMEPAGE() throws MalformedURLException {
-
-		if (APP_URL.contains("localhost")) {
-			// Local
-			//WebDriverManager.chromedriver().setup();
-			System.setProperty("webdriver.chrome.driver","src/test/resources/chromedriver-win64/chromedriver.exe");
-			driver = new ChromeDriver();
-
-		} else {
+	private WebDriver createWebDriver() throws MalformedURLException {
+		WebDriver driver;
+		if (EPHEMERAL.equalsIgnoreCase("true")) {
 			// Remote
 			ChromeOptions chromeOptions = new ChromeOptions();
 			driver = new RemoteWebDriver(new URL("http://selenium-hub:4444/wd/hub"), chromeOptions);
+		} else {
+			// Local
+			System.setProperty("webdriver.chrome.driver","src/test/resources/chromedriver-win64/chromedriver.exe");
+			driver = new ChromeDriver();
 		}
+		return driver;
+	}
+
+	private String getApplicationUrl() {
+		return EPHEMERAL.equalsIgnoreCase("true") ? "http://frontend:4200/petclinic" : "http://localhost:4200/petclinic";
+	}
+
+	@Given("I visit the HOMEPAGE")
+	public void i_visit_the_HOMEPAGE() throws MalformedURLException {
+		driver = createWebDriver();
+		driver.get(getApplicationUrl());
+//		if (EPHEMERAL.equalsIgnoreCase("true")) {
+//			// Remote
+//			ChromeOptions chromeOptions = new ChromeOptions();
+//			driver = new RemoteWebDriver(new URL("http://selenium-hub:4444/wd/hub"), chromeOptions);
+//			driver.get("http://frontend:4200/petclinic");
+//		} else {
+//			// Local
+//			//WebDriverManager.chromedriver().setup();
+//			System.setProperty("webdriver.chrome.driver","src/test/resources/chromedriver-win64/chromedriver.exe");
+//			driver = new ChromeDriver();
+//			driver.get("http://localhost:4200/petclinic");
+//		}
 		//driver.get("http://" + HOSTNAME + ":4200/petclinic");
-		driver.get(APP_URL);
+		//driver.get(APP_URL);
 	}
 
 	@When("I click on the OWNERS option")
