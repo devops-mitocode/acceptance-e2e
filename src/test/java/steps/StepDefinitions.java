@@ -48,6 +48,7 @@ public class StepDefinitions {
 	@Given("I visit the HOMEPAGE")
 	public void i_visit_the_HOMEPAGE() throws MalformedURLException {
 		driver = createWebDriver();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 		driver.get(getApplicationUrl());
 //		if (EPHEMERAL.equalsIgnoreCase("true")) {
 //			// Remote
