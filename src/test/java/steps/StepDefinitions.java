@@ -42,13 +42,14 @@ public class StepDefinitions {
 	}
 
 	private String getApplicationUrl() {
-		return EPHEMERAL.equalsIgnoreCase("true") ? "http://frontend:8080/petclinic" : "http://localhost:4200/petclinic";
+		return EPHEMERAL.equalsIgnoreCase("true") ? "http://frontend:8080" : "http://localhost:4200/petclinic";
 	}
 
 	@Given("I visit the HOMEPAGE")
 	public void i_visit_the_HOMEPAGE() throws MalformedURLException {
 		driver = createWebDriver();
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		System.out.println("EPHEMERAL = " + getApplicationUrl());
 		driver.get(getApplicationUrl());
 //		if (EPHEMERAL.equalsIgnoreCase("true")) {
 //			// Remote
