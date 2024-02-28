@@ -42,7 +42,7 @@ public class StepDefinitions {
 	}
 
 	private String getApplicationUrl() {
-		return EPHEMERAL.equalsIgnoreCase("true") ? "http://frontend:4200/petclinic" : "http://localhost:4200/petclinic";
+		return EPHEMERAL.equalsIgnoreCase("true") ? "http://frontend:8080/petclinic" : "http://localhost:4200/petclinic";
 	}
 
 	@Given("I visit the HOMEPAGE")
