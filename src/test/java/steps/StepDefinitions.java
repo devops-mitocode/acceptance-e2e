@@ -34,7 +34,8 @@ public class StepDefinitions {
 			driver = new RemoteWebDriver(new URL("http://selenium-hub:4444/wd/hub"), chromeOptions);
 		} else {
 			// Local
-			System.setProperty("webdriver.chrome.driver","src/test/resources/chromedriver-win64/chromedriver.exe");
+			//System.setProperty("webdriver.chrome.driver","src/test/resources/chromedriver-win64/chromedriver.exe");
+			WebDriverManager.chromedriver().setup();
 			driver = new ChromeDriver();
 		}
 		return driver;
@@ -67,7 +68,6 @@ public class StepDefinitions {
 	@When("I click on the OWNERS option")
 	public void i_click_on_the_OWNERS_option() {
 		driver.findElement(By.xpath("/html/body/app-root/div[1]/nav/div/ul/li[2]/a")).click();
-
 	}
 
 	@When("I click on the ALL option")
@@ -77,9 +77,10 @@ public class StepDefinitions {
 
 	@Then("I should see a list of all owners is displayed")
 	public void i_should_see_a_list_of_all_owners_is_displayed() {
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		Assert.assertEquals(
-				driver.findElements(By.xpath("/html/body/app-root/app-owner-list/div/div/div/table/tbody")).size(), 1);
+				driver.findElements(By.xpath("//*[@id=\"ownersTable\"]/table/tbody")).size(), 1);
+		driver.quit();
 	}
 
 	@When("I click on the ADD NEW option")
@@ -94,12 +95,7 @@ public class StepDefinitions {
 
 	@When("I press Add Owner")
 	public void i_press_Add_Owner() {
-		driver.findElement(By.xpath("/html/body/app-root/app-owner-add/div/div/form/div[7]/div/button[2]")).click();
-	}
-
-	@After()
-	public void closeBrowser() {
-		driver.quit();
+		driver.findElement(By.xpath("/html/body/app-root/div[2]/app-owner-add/div/div/form/div[7]/div/button[2]")).click();
 	}
 
 }
